@@ -93,7 +93,9 @@ CREATE TABLE proyectos_urbanos (
                  ),
     id_zona      INT REFERENCES zonas_urbanas(id) ON DELETE SET NULL,
     id_usuario   INT REFERENCES usuarios(id) ON DELETE SET NULL,
-    ubicacion    TEXT                              -- Descripción o coordenadas textuales del proyecto
+    ubicacion    TEXT,                             -- Descripción o coordenadas textuales del proyecto
+    latitud      NUMERIC(9,6),                     -- Coordenadas geográficas (latitud del proyecto)
+    longitud     NUMERIC(9,6)                      -- Coordenadas geográficas (longitud del proyecto)
 );
 
 -- Índices para optimizar consultas por estado y relaciones
@@ -168,7 +170,7 @@ END;
 $$;
 
 -- ================================================================
--- 10. VISTA MATERIALIZADA: vista_cobertura_infraestructura
+-- Consulta 5. VISTA MATERIALIZADA: vista_cobertura_infraestructura
 -- Resume la cantidad de parques, escuelas y hospitales por zona
 -- ================================================================
 CREATE MATERIALIZED VIEW vista_cobertura_infraestructura AS
