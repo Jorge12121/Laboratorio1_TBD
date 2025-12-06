@@ -1,54 +1,67 @@
 -- ================================================================
 -- PROYECTO: Plataforma de Urbanismo y Planificación de Ciudades
--- BASE DE DATOS: PostgreSQL (sin PostGIS)
--- CONTENIDO: Creación de base, tablas, índices, triggers,
---            procedimientos almacenados y vistas materializadas
+-- BASE DE DATOS: PostgreSQL + PostGIS
+-- CONTENIDO: Tablas, índices, triggers, procedimientos,
+--            vistas materializadas y soporte espacial
 -- ================================================================
+
+-- 0. Habilitar PostGIS en esta base (ejecutar una sola vez)
+CREATE EXTENSION IF NOT EXISTS postgis;
 
 -- ================================================================
 -- 1. TABLA: usuarios
 -- Almacena los datos de los planificadores y administradores del sistema
 -- ================================================================
+
+
 CREATE TABLE usuarios (
     id              SERIAL PRIMARY KEY,
     nombre          VARCHAR(100) NOT NULL,
     email           VARCHAR(100) UNIQUE NOT NULL,
-    contrasena_hash TEXT NOT NULL,              -- Contraseña en formato hash
+    contrasena_hash TEXT NOT NULL,               -- Contraseña en formato hash
     rol             VARCHAR(20) DEFAULT 'planificador', -- 'planificador', 'admin', etc.
     fecha_creacion  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- ================================================================
 -- 2. TABLA: zonas_urbanas
--- Contiene los sectores o barrios de la ciudad
--- (Sin PostGIS: se usan coordenadas/geom como texto)
+-- Sectores o barrios de la ciudad, con geometría POLYGON
 -- ================================================================
+
+
 CREATE TABLE zonas_urbanas (
     id         SERIAL PRIMARY KEY,
     nombre     VARCHAR(100) NOT NULL,
     tipo_zona  VARCHAR(50) NOT NULL CHECK (
                     tipo_zona IN ('Residencial', 'Comercial', 'Industrial', 'Mixta')
                ),
-    coordenadas TEXT,                           -- Coordenadas o descripción del límite de la zona
-    area_km2   NUMERIC(10,2) CHECK (area_km2 IS NULL OR area_km2 >= 0)
+    coordenadas TEXT,                               -- Descripción o coords en texto (opcional)
+    area_km2   NUMERIC(10,2) CHECK (area_km2 IS NULL OR area_km2 >= 0),
+    geom       geometry(POLYGON, 4326)              -- Geometría real de la zona (WGS84)
 );
 
 -- Índice para búsquedas por nombre de zona
 CREATE INDEX idx_zonas_nombre ON zonas_urbanas(nombre);
 
+-- Índice espacial para consultas geográficas
+CREATE INDEX idx_zonas_geom
+    ON zonas_urbanas
+    USING GIST (geom);
+
 -- ================================================================
 -- 3. TABLA: puntos_interes
 -- Representa lugares relevantes dentro de una zona
--- (escuelas, hospitales, parques, etc.)
+-- (escuelas, hospitales, parques, etc.) como POINT
 -- ================================================================
+
+
 CREATE TABLE puntos_interes (
     id       SERIAL PRIMARY KEY,
     nombre   VARCHAR(100) NOT NULL,
     tipo     VARCHAR(50) NOT NULL CHECK (
                   tipo IN ('Escuela', 'Hospital', 'Parque', 'Otro')
              ),
-    latitud  NUMERIC(9,6),                       -- Coordenadas geográficas (latitud)
-    longitud NUMERIC(9,6),                       -- Coordenadas geográficas (longitud)
+    geom     geometry(POINT, 4326),                -- Geometría puntual (WGS84)
     id_zona  INT REFERENCES zonas_urbanas(id) ON DELETE CASCADE
 );
 
@@ -58,10 +71,16 @@ CREATE INDEX idx_puntos_tipo ON puntos_interes(tipo);
 -- Índice para acelerar filtros por zona
 CREATE INDEX idx_puntos_zona ON puntos_interes(id_zona);
 
+-- Índice espacial para consultas geográficas
+CREATE INDEX idx_puntos_geom
+    ON puntos_interes
+    USING GIST (geom);
+
 -- ================================================================
 -- 4. TABLA: datos_demograficos
--- Almacena estadísticas demográficas por zona y año
+-- Estadísticas demográficas por zona y año
 -- ================================================================
+
 CREATE TABLE datos_demograficos (
     id            SERIAL PRIMARY KEY,
     id_zona       INT NOT NULL REFERENCES zonas_urbanas(id) ON DELETE CASCADE,
@@ -80,8 +99,11 @@ ADD CONSTRAINT uq_datos_zona_anio UNIQUE (id_zona, anio);
 
 -- ================================================================
 -- 5. TABLA: proyectos_urbanos
--- Guarda los proyectos de desarrollo o planificación
+-- Guarda los proyectos de desarrollo o planificación.
+-- Representados como POLYGON para poder analizar superposición.
 -- ================================================================
+
+
 CREATE TABLE proyectos_urbanos (
     id           SERIAL PRIMARY KEY,
     nombre       VARCHAR(150) NOT NULL,
@@ -93,15 +115,19 @@ CREATE TABLE proyectos_urbanos (
                  ),
     id_zona      INT REFERENCES zonas_urbanas(id) ON DELETE SET NULL,
     id_usuario   INT REFERENCES usuarios(id) ON DELETE SET NULL,
-    ubicacion    TEXT,                             -- Descripción o coordenadas textuales del proyecto
-    latitud      NUMERIC(9,6),                     -- Coordenadas geográficas (latitud del proyecto)
-    longitud     NUMERIC(9,6)                      -- Coordenadas geográficas (longitud del proyecto)
+    ubicacion    TEXT,                             -- Descripción textual (opcional)
+    geom         geometry(POLYGON, 4326)           -- Geometría del área del proyecto (WGS84)
 );
 
 -- Índices para optimizar consultas por estado y relaciones
 CREATE INDEX idx_proyectos_estado  ON proyectos_urbanos(estado);
 CREATE INDEX idx_proyectos_zona    ON proyectos_urbanos(id_zona);
 CREATE INDEX idx_proyectos_usuario ON proyectos_urbanos(id_usuario);
+
+-- Índice espacial para consultas geográficas
+CREATE INDEX idx_proyectos_geom
+    ON proyectos_urbanos
+    USING GIST (geom);
 
 -- ================================================================
 -- 6. FUNCIÓN: validar_fechas_proyecto()
@@ -125,6 +151,8 @@ $$ LANGUAGE plpgsql;
 -- Ejecuta la función anterior antes de cada inserción o actualización
 -- en la tabla proyectos_urbanos
 -- ================================================================
+
+
 CREATE TRIGGER trg_validar_fechas_proyecto
 BEFORE INSERT OR UPDATE ON proyectos_urbanos
 FOR EACH ROW
@@ -132,7 +160,7 @@ EXECUTE FUNCTION validar_fechas_proyecto();
 
 -- ================================================================
 -- 8. PROCEDIMIENTO: simular_crecimiento_poblacion()
--- Incrementa la población de una zona según la cantidad de nuevas viviendas
+-- Incrementa la población de una zona según nuevas viviendas
 -- (Se estima 3 personas por vivienda)
 -- ================================================================
 CREATE OR REPLACE PROCEDURE simular_crecimiento_poblacion(
@@ -150,9 +178,8 @@ $$;
 
 -- ================================================================
 -- 9. PROCEDIMIENTO: actualizar_proyectos_retrasados()
--- Dado un ID de usuario, actualiza el estado de todos los proyectos
--- creados por ese usuario que han pasado su fecha límite y no están
--- completados, marcándolos como 'Retrasado'.
+-- Dado un ID de usuario, marca como 'Retrasado' los proyectos
+-- vencidos que no están completados.
 -- ================================================================
 CREATE OR REPLACE PROCEDURE actualizar_proyectos_retrasados(
     IN p_id_usuario INT
@@ -170,9 +197,11 @@ END;
 $$;
 
 -- ================================================================
--- Consulta 5. VISTA MATERIALIZADA: vista_cobertura_infraestructura
+-- 10. VISTA MATERIALIZADA: vista_cobertura_infraestructura
 -- Resume la cantidad de parques, escuelas y hospitales por zona
 -- ================================================================
+
+
 CREATE MATERIALIZED VIEW vista_cobertura_infraestructura AS
 SELECT
     z.id     AS id_zona,
@@ -195,8 +224,10 @@ $$ LANGUAGE plpgsql;
 -- ================================================================
 -- 11. VISTA MATERIALIZADA:
 --     vista_resumen_proyectos_estado_zona
--- Resume la cantidad de proyectos por estado y por tipo de zona urbana
+-- Resume la cantidad de proyectos por estado y por tipo de zona
 -- ================================================================
+
+
 CREATE MATERIALIZED VIEW vista_resumen_proyectos_estado_zona AS
 SELECT
     z.tipo_zona,
