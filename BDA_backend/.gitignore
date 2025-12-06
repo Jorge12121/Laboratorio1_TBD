@@ -1,0 +1,9 @@
+# Ignorar configuraciones de la aplicación
+src/main/resources/application.properties
+
+# Opcional: Ignorar carpetas de compilación y archivos de IDE
+target/
+.mvn/
+.idea/
+*.iml
+.vscode/
