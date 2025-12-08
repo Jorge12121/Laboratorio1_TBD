@@ -2,6 +2,7 @@ package com.example.bda.Model;
 
 public class datos_demograficos {
 
+    private int id_datos;
     private int id_zona;
     private int anio;
     private int poblacion;

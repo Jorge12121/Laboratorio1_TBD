@@ -4,6 +4,7 @@ import java.time.LocalDate;
 
 public class proyectos_urbanos {
 
+    private int id_proyectos;
     private String nombre;
     private String descripcion;
     private LocalDate fecha_inicio;

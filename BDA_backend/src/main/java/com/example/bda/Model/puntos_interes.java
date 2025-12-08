@@ -2,6 +2,7 @@ package com.example.bda.Model;
 
 public class puntos_interes {
 
+    private int id_punto;
     private String nombre;
     private String tipo;
     private double latitud;

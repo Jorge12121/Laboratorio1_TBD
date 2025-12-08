@@ -2,6 +2,7 @@ package com.example.bda.Model;
 
 public class zonas_urbanas {
 
+    private int id_zona;
     private String nombre;
     private String tipo_zona;
     private String coordenadas;

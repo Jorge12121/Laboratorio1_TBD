@@ -2,6 +2,7 @@ package com.example.bda.Model;
 
 public class usuarios {
 
+    private int id_usuario;
     private String nombre;
     private String email;
     private String contrasena_hash;
