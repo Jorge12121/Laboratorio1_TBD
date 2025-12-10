@@ -1,5 +1,5 @@
 # Ignorar configuraciones de la aplicación
-src/main/resources/application.properties
+BDA_backend/src/main/resources/application.properties
 
 # Opcional: Ignorar carpetas de compilación y archivos de IDE
 target/

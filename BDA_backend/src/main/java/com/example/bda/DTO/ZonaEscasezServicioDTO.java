@@ -1,6 +1,7 @@
 package com.example.bda.DTO;
 
-public class ZonaEscazesServicioDTO {
+
+public class ZonaEscasezServicioDTO {
     //Para devolver esta clase en 2
     private String nombreZona;
 
@@ -11,9 +12,9 @@ public class ZonaEscazesServicioDTO {
     private int hospitales;
 
     //DTO vacio porque no funciona sin esto
-    public ZonaEscazesServicioDTO() {}
+    public ZonaEscasezServicioDTO() {}
 
-    public ZonaEscazesServicioDTO(String nombreZona, int poblacion, int hospitales) {
+    public ZonaEscasezServicioDTO(String nombreZona, int poblacion, int hospitales) {
         this.nombreZona = nombreZona;
         this.poblacion = poblacion;
         this.hospitales = hospitales;

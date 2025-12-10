@@ -1,6 +1,6 @@
 package com.example.bda.Controller;
 
-import com.example.bda.DTO.ZonaEscazesServicioDTO;
+import com.example.bda.DTO.ZonaEscasezServicioDTO;
 import com.example.bda.Services.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/reportes") // Prefijo para la URL
 public class ReporteController {
@@ -22,8 +24,8 @@ public class ReporteController {
         return reporteService.getDensidadPoblacion();
     }
 
-    @GetMapping("/hospitales")
-    public List<ZonaEscazesServicioDTO> verHospitales() {
-        return reporteService.obtenerZonaEscazesServicio();
+    @GetMapping("/escasez")
+    public List<ZonaEscasezServicioDTO> verEscasez() {
+        return reporteService.obtenerZonaEscasezServicio();
     }
 }
