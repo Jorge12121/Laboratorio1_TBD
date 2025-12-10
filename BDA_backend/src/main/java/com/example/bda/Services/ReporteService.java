@@ -1,5 +1,6 @@
 package com.example.bda.Services;
 
+import com.example.bda.DTO.ZonaEscazesServicioDTO;
 import com.example.bda.Repository.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,5 +15,9 @@ public class ReporteService {
 
     public List<Map<String, Object>> getDensidadPoblacion() {
         return reporteRepository.obtenerDensidad();
+    }
+
+    public List<ZonaEscazesServicioDTO> obtenerZonaEscazesServicio() {
+        return reporteRepository.obtenerZonaEscazes();
     }
 }
