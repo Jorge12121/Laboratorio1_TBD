@@ -1,5 +1,6 @@
 package com.example.bda.Services;
 
+import com.example.bda.DTO.CercaProyectoUrbanoDTO;
 import com.example.bda.DTO.ZonaEscasezServicioDTO;
 import com.example.bda.Repository.ReporteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,9 @@ public class ReporteService {
 
     public List<ZonaEscasezServicioDTO> obtenerZonaEscasezServicio() {
         return reporteRepository.obtenerZonaEscasez();
+    }
+
+    public List<CercaProyectoUrbanoDTO> obtenerCercaProyectoUrbano() {
+        return reporteRepository.obtenerCercaProyectoUrbano();
     }
 }

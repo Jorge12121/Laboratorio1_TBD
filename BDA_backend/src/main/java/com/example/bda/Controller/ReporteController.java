@@ -1,5 +1,6 @@
 package com.example.bda.Controller;
 
+import com.example.bda.DTO.CercaProyectoUrbanoDTO;
 import com.example.bda.DTO.ZonaEscasezServicioDTO;
 import com.example.bda.Services.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,5 +28,10 @@ public class ReporteController {
     @GetMapping("/escasez")
     public List<ZonaEscasezServicioDTO> verEscasez() {
         return reporteService.obtenerZonaEscasezServicio();
+    }
+
+    @GetMapping("/escuelas")
+    public List<CercaProyectoUrbanoDTO> verEscuelas() {
+        return reporteService.obtenerCercaProyectoUrbano();
     }
 }

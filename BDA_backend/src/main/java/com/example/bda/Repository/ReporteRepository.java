@@ -1,5 +1,6 @@
 package com.example.bda.Repository;
 
+import com.example.bda.DTO.CercaProyectoUrbanoDTO;
 import com.example.bda.DTO.ZonaEscasezServicioDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -40,6 +41,23 @@ public class ReporteRepository {
                         rs.getString("nombreZona"),
                         rs.getInt("poblacion"),
                         rs.getInt("hospitales")
+                ));
+    }
+
+    // 3. ESCUELAS CERCA
+    public List<CercaProyectoUrbanoDTO> obtenerCercaProyectoUrbano() {
+        String sql = "SELECT pi.nombre AS escuela, pu.nombre AS proyecto, " +
+                "ST_Distance(pi.geom, pu.geom) AS distancia " +
+                "FROM puntos_interes pi " +
+                "JOIN proyectos_urbanos pu ON pu.estado = 'En Curso' " +
+                "WHERE pi.tipo = 'Escuela' " +
+                "AND ST_Distance(pi.geom, pu.geom) < 500";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new CercaProyectoUrbanoDTO(
+                        rs.getString("escuela"),
+                        rs.getString("proyecto"),
+                        rs.getDouble("distancia")
                 ));
     }
     
