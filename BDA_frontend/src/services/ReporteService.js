@@ -1,15 +1,16 @@
-import axios from 'axios';
+import api from './api'; // Importamos nuestra instancia de api para traer el Token JWT
 
-const API_URL = 'http://localhost:8090/api/reportes';
+//Como 'api' ya tiene la base 'http://localhost:8090', aquí solo ponemos la ruta relativa.
+const API_URL = '/api/reportes';
 
 class ReporteService {
   obtenerDensidad() {
-    return axios.get(`${API_URL}/densidad`);
+    return api.get(`${API_URL}/densidad`);
   }
 
   
   obtenerEscasez() {
-    return axios.get(`${API_URL}/escasez`); 
+    return api.get(`${API_URL}/escasez`); 
   }
 }
 
