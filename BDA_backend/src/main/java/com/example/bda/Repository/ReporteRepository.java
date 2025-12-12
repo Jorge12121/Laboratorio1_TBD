@@ -2,6 +2,7 @@ package com.example.bda.Repository;
 
 import com.example.bda.DTO.CercaProyectoUrbanoDTO;
 import com.example.bda.DTO.ZonaEscasezServicioDTO;
+import com.example.bda.DTO.ZonasRapidoCrecimientoDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -58,6 +59,23 @@ public class ReporteRepository {
                         rs.getString("escuela"),
                         rs.getString("proyecto"),
                         rs.getDouble("distancia")
+                ));
+    }
+
+    // 4. Zona de Rápido Crecimiento
+    public List<ZonasRapidoCrecimientoDTO> obtenerZonasRapidoCrecimiento() {
+        //dd es datos_demograficos despues, los más recientes y da es datos_demograficos antes
+        String sql = "SELECT z.nombre AS nombreZona, ((dd.poblacion - da.poblacion)::float / da.poblacion) * 100 AS crecimiento " +
+                "FROM zonas_urbanas z " +
+                "JOIN datos_demograficos dd ON z.id = dd.id_zona AND dd.anio = (SELECT MAX(anio) FROM datos_demograficos d1 WHERE d1.id_zona = z.id) " + //Aqui vemos que es el máximo
+                "JOIN datos_demograficos da ON z.id = da.id_zona AND da.anio = (SELECT MAX(d2.anio) FROM datos_demograficos d2 WHERE d2.id_zona = z.id AND d2.anio <= (SELECT MAX(anio) - 5 FROM datos_demograficos)) " +
+                "WHERE ((dd.poblacion - da.poblacion)::float / da.poblacion) * 100 > 10 " +
+                "LIMIT 3";
+
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new ZonasRapidoCrecimientoDTO(
+                        rs.getString("nombreZona"),
+                        rs.getFloat("crecimiento")
                 ));
     }
     
