@@ -35,7 +35,7 @@ public class ProyectoRepository {
     }
 
     public void actualizarEstadoProyecto(int id_usuario){
-        jdbcTemplate.update("CALL actualizar_estado_proyecto(?)",
+        jdbcTemplate.update("CALL actualizar_proyectos_retrasados(?)",
                 id_usuario);
     }
 
