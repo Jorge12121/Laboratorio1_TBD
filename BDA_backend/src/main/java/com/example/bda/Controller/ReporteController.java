@@ -3,6 +3,7 @@ package com.example.bda.Controller;
 import com.example.bda.DTO.CercaProyectoUrbanoDTO;
 import com.example.bda.DTO.ZonaEscasezServicioDTO;
 import com.example.bda.DTO.ZonasRapidoCrecimientoDTO;
+import com.example.bda.Repository.ZonaRepository;
 import com.example.bda.Services.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,8 @@ public class ReporteController {
 
     @Autowired
     private ReporteService reporteService;
+    @Autowired
+    private ZonaRepository zonaRepository;
 
     // URL final para consultas: http://localhost:8090/api/reportes/densidad
     @GetMapping("/densidad")
@@ -40,4 +43,7 @@ public class ReporteController {
     public List<ZonasRapidoCrecimientoDTO> verCrecimiento() {
         return reporteService.obtenerZonasRapidoCrecimiento();
     }
+
+    @GetMapping("/zonas-sin-planificacion")
+    public List<Map<String, Object>> getZonasOlvidadas() { return zonaRepository.obtenerZonasSinPlanificacion(); }
 }

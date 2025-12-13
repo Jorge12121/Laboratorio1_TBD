@@ -34,6 +34,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/auth/**").permitAll() // Login y registro públicos
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // <--- 2. Permitir "pre-flight" del navegador
+
+                        // Esto permite que cualquiera (Postman) entre a los reportes sin token (PARA PRUEBAS)
+                        .requestMatchers("/api/reportes/**").permitAll()
+
                         .anyRequest().authenticated() // El resto privado
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
