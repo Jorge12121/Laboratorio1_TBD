@@ -37,6 +37,8 @@ public class SecurityConfig {
 
                         // Esto permite que cualquiera (Postman) entre a los reportes sin token (PARA PRUEBAS)
                         .requestMatchers("/api/reportes/**").permitAll()
+                        .requestMatchers("/api/datos_demograficos/**").permitAll()
+                        .requestMatchers("/api/proyectos/**").permitAll()
 
                         .anyRequest().authenticated() // El resto privado
                 )

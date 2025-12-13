@@ -15,4 +15,8 @@ public class ProyectoService {
     public List<Map<String, Object>> getAllProyectos() {
         return proyectoRepository.findAll();
     }
+
+    public void actualizarEstadoProyecto(int id_usario){
+        proyectoRepository.actualizarEstadoProyecto(id_usario);
+    }
 }

@@ -34,4 +34,9 @@ public class ProyectoRepository {
         return jdbcTemplate.queryForList(sql);
     }
 
+    public void actualizarEstadoProyecto(int id_usuario){
+        jdbcTemplate.update("CALL actualizar_estado_proyecto(?)",
+                id_usuario);
+    }
+
 }
