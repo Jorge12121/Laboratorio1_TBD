@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/reportes/**").permitAll()
                         .requestMatchers("/api/datos_demograficos/**").permitAll()
                         .requestMatchers("/api/proyectos/**").permitAll()
+                        .requestMatchers("/api/usuarios/registro").permitAll() //Este se debe dejar para permitir registro sin logeo
 
                         .anyRequest().authenticated() // El resto privado
                 )

@@ -41,4 +41,14 @@ public class UsuarioRepository {
             return Optional.empty();
         }
     }
+
+    public int crearUsuario(usuarios nuevoUsuario) {
+        String sql = "INSERT INTO usuarios (nombre, email, contrasena_hash, rol) VALUES (?, ?, ?, ?)";
+        return jdbcTemplate.update(sql,
+                nuevoUsuario.getNombre(),
+                nuevoUsuario.getEmail(),
+                nuevoUsuario.getContrasena_hash(),
+                nuevoUsuario.getRol()
+        );
+    }
 }
