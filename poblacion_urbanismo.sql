@@ -215,6 +215,37 @@ VALUES
    ST_SetSRID(ST_MakePoint(-70.7450, -33.4950), 4326)::geography,
    50
  )::geometry(POLYGON, 4326)
+),
+('Anexo Hospital (Conflicto)',
+ 'Proyecto prueba para superposicion.',
+ '2025-01-01', '2026-01-01', 'Planeado', 1, 1, 'Al lado del hospital',
+ ST_Buffer(
+   ST_SetSRID(ST_MakePoint(-70.6662, -33.4502), 4326)::geography,
+   50
+ )::geometry(POLYGON, 4326)
+),
+('Instalacion Semáforos', 
+  'Nuevos semáforos en la ampliación.', 
+  '2025-01-10', '2025-06-01', 'Planeado', 8, 2, 'Cruce Principal',
+  ST_Buffer(
+    ST_SetSRID(ST_MakePoint(-70.6785, -33.4567), 4326)::geography, 
+    50
+    )::geometry(POLYGON, 4326)
+),
+('Estacion de Bicicletas', 
+  'Estacionamiento techado para bicis.', 
+  '2024-02-01', '2024-08-01', 'Completado', 4, 2, 'Entrada Universidad',
+  ST_Buffer(
+    ST_SetSRID(ST_MakePoint(-70.6901, -33.4503), 4326)::geography, 
+    50
+    )::geometry(POLYGON, 4326)
+),
+('Kiosco del Parque', 
+  'Pequeño comercio dentro del parque.', 
+  '2025-06-01', '2025-12-01', 'Planeado', 2, 4, 'Centro del Parque',
+  ST_Buffer(ST_SetSRID(ST_MakePoint(-70.6704, -33.4304), 4326)::geography, 
+  50
+  )::geometry(POLYGON, 4326)
 );
 
 REFRESH MATERIALIZED VIEW vista_cobertura_infraestructura;
