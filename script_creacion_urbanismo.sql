@@ -237,13 +237,20 @@ FROM proyectos_urbanos p
 LEFT JOIN zonas_urbanas z ON p.id_zona = z.id
 GROUP BY z.tipo_zona, p.estado;
 
+
+
+CREATE UNIQUE INDEX IF NOT EXISTS uq_mv_resumen_proyectos
+ON vista_resumen_proyectos_estado_zona (tipo_zona, estado);
+
+
 -- Función para refrescar la vista de resumen de proyectos
 CREATE OR REPLACE FUNCTION refrescar_vista_resumen_proyectos()
 RETURNS VOID AS $$
 BEGIN
-    REFRESH MATERIALIZED VIEW vista_resumen_proyectos_estado_zona;
+    REFRESH MATERIALIZED VIEW CONCURRENTLY vista_resumen_proyectos_estado_zona;
 END;
 $$ LANGUAGE plpgsql;
+
 
 -- ================================================================
 -- FIN DEL ARCHIVO
