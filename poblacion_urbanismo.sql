@@ -13,7 +13,9 @@ INSERT INTO usuarios (nombre, email, contrasena_hash, rol) VALUES
 ('Usuario Prueba 2', 'up2@ciudad.cl', 'hash_up2', 'planificador'),
 ('Jefe de Zona Sur', 'jzs@ciudad.cl', 'hash_jzs', 'admin'),
 ('Urbanista Senior', 'us@ciudad.cl', 'hash_us', 'planificador'),
-('Inspector 1', 'i1@ciudad.cl', 'hash_i1', 'planificador');
+('Inspector 1', 'i1@ciudad.cl', 'hash_i1', 'planificador'),
+('Prueba', 'test@usach.cl', '$2a$12$HZRwLDqKU0NH4Y1TjwjA3.3tnJhiOtojepRFW.WMU0sS3yisMlUDu', 'USER'),--contraseña: 123456
+('Prueba', 'test2@usach.cl', '$2a$12$VPahmO67snF6IdOLopAow.Jrn1YyXUm7vI2yKDaYUk..OKFkDdsF.', 'USER');--contraseña: 1234
 
 -- 2. TABLA: zonas_urbanas (15 registros)
 -- Nota: por ahora dejamos geom = NULL (se puede poblar después con polígonos reales)

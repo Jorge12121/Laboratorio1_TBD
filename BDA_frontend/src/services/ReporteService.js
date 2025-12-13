@@ -1,17 +1,27 @@
-import api from './api'; // Importamos nuestra instancia de api para traer el Token JWT
+import api from './api'
 
-//Como 'api' ya tiene la base 'http://localhost:8090', aquí solo ponemos la ruta relativa.
-const API_URL = '/api/reportes';
+const API_URL = '/api/reportes'
 
 class ReporteService {
+  // Consulta 1
   obtenerDensidad() {
-    return api.get(`${API_URL}/densidad`);
+    return api.get(`${API_URL}/densidad`)
   }
 
-  
+  // Consulta 2
   obtenerEscasez() {
-    return api.get(`${API_URL}/escasez`); 
+    return api.get(`${API_URL}/escasez`)
+  }
+
+  // Consulta 3
+  obtenerEscuelas() {
+    return api.get(`${API_URL}/escuelas`)
+  }
+
+  // Consulta 4
+  obtenerCrecimiento() {
+    return api.get(`${API_URL}/crecimiento`)
   }
 }
 
-export default new ReporteService();
+export default new ReporteService()
