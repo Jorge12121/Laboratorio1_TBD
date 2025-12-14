@@ -6,7 +6,7 @@ const proyectos = ref([])
 const cargando = ref(true)
 const error = ref('')
 
-const filtroEstado = ref('TODOS') // TODOS | PLANEADO | EN_CURSO | COMPLETADO
+const filtroEstado = ref('TODOS') // TODOS | PLANEADO | EN_CURSO | COMPLETADO | RETRASADO
 
 const cargar = async () => {
   cargando.value = true
@@ -30,6 +30,7 @@ const normalizarEstado = (estado) => {
   if (s === 'planeado') return 'PLANEADO'
   if (s === 'en curso') return 'EN_CURSO'
   if (s === 'completado') return 'COMPLETADO'
+  if (s === 'retrasado') return 'RETRASADO'
   return 'OTRO'
 }
 
@@ -38,6 +39,7 @@ const badgeClass = (estado) => {
   if (e === 'PLANEADO') return 'badge gray'
   if (e === 'EN_CURSO') return 'badge amber'
   if (e === 'COMPLETADO') return 'badge green'
+  if (e === 'RETRASADO') return 'badge red'
   return 'badge'
 }
 
@@ -45,6 +47,20 @@ const proyectosFiltrados = computed(() => {
   if (filtroEstado.value === 'TODOS') return proyectos.value
   return proyectos.value.filter(p => normalizarEstado(p.estado) === filtroEstado.value)
 })
+
+const formatearFecha = (fecha) => {
+  if (!fecha) return '-'
+  try {
+    const d = new Date(fecha)
+    return d.toLocaleDateString('es-CL', { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric' 
+    })
+  } catch {
+    return String(fecha)
+  }
+}
 </script>
 
 <template>
@@ -55,12 +71,13 @@ const proyectosFiltrados = computed(() => {
         <p>Listado de proyectos registrados.</p>
       </div>
 
-      <div class="select-wrap">
+      <div class="actions">
         <select class="select" v-model="filtroEstado">
           <option value="TODOS">Todos</option>
           <option value="PLANEADO">Planeado</option>
           <option value="EN_CURSO">En curso</option>
           <option value="COMPLETADO">Completado</option>
+          <option value="RETRASADO">Retrasado</option>
         </select>
 
         <button class="btn primary" type="button" @click="cargar" :disabled="cargando">
@@ -83,6 +100,18 @@ const proyectosFiltrados = computed(() => {
         </div>
 
         <p class="desc">{{ proy.descripcion || 'Sin descripción.' }}</p>
+
+        <div class="meta">
+          <span class="meta-item" v-if="proy.fecha_inicio">
+             Inicio: {{ formatearFecha(proy.fecha_inicio) }}
+          </span>
+          <span class="meta-item" v-if="proy.fecha_fin">
+             Fin: {{ formatearFecha(proy.fecha_fin) }}
+          </span>
+          <span class="meta-item" v-if="proy.id_usuario">
+             Usuario ID: {{ proy.id_usuario }}
+          </span>
+        </div>
       </div>
 
       <div v-if="proyectosFiltrados.length === 0" class="alert">
@@ -140,7 +169,7 @@ const proyectosFiltrados = computed(() => {
 
 .grid{
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 14px;
 }
 
@@ -157,8 +186,23 @@ const proyectosFiltrados = computed(() => {
 .name{ margin: 0; font-size: 15px; }
 
 .desc{
-  margin: 0;
+  margin: 0 0 10px;
   font-size: 13px;
   color: rgba(234,240,255,.78);
+}
+
+.meta{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 11px;
+  opacity: .75;
+}
+
+.meta-item{
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid rgba(255,255,255,.08);
 }
 </style>

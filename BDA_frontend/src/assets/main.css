@@ -167,6 +167,11 @@ p { margin: 0 0 12px; color: var(--muted); }
 .badge.green{ background: rgba(66,185,131,.18); border-color: rgba(66,185,131,.30); }
 .badge.amber{ background: rgba(245,158,11,.18); border-color: rgba(245,158,11,.30); }
 .badge.gray{ background: rgba(148,163,184,.14); border-color: rgba(148,163,184,.26); }
+.badge.red {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+}
 
 /* ====== Alerts ====== */
 .alert{
