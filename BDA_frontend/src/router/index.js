@@ -37,7 +37,7 @@ const router = createRouter({
       component: DashboardLayout,
       meta: { requiresAuth: true },
       children: [
-        { path: '', redirect: '/mapa' },
+        { path: '', redirect: '/login' },
 
         { path: 'mapa', component: MapaView },
         { path: 'consultas', component: ConsultasHubView },
@@ -72,9 +72,11 @@ router.beforeEach((to) => {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
 
-  // Si es solo para invitados (Login o Registro) y ya hay token -> va al Mapa
+  // Si es solo para invitados y hay token -> limpia y permite
   if (to.meta.guestOnly && token) {
-    return { path: '/mapa' }
+    localStorage.removeItem('token')
+    localStorage.removeItem('userName')
+    return true
   }
 
   return true
