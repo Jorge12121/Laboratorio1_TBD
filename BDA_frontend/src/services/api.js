@@ -28,4 +28,10 @@ api.interceptors.response.use(
   }
 )
 
+export const registerUser = async (usuario) => {
+    // El backend espera: { nombre, email, contrasena_hash, rol }
+    const response = await axios.post(`${API_URL}/api/usuarios/registro`, usuario);
+    return response.data;
+}
+
 export default api;

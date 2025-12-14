@@ -4,6 +4,10 @@ import DashboardLayout from '../layouts/DashboardLayout.vue'
 import LoginPage from '../views/LoginView.vue'
 import NotFoundView from '../views/NotFoundView.vue'
 
+// IMPORTANTE: Importamos el componente de registro que creamos
+// (Asegúrate de que la ruta coincida con donde guardaste el archivo)
+import RegisterView from '../views/RegisterView.vue'
+
 import MapaView from '../views/MapaView.vue'
 import ConsultasHubView from '../views/ConsultasHubView.vue'
 import DensidadView from '../views/DensidadView.vue'
@@ -21,7 +25,12 @@ import ResumenProyectosView from '../views/ResumenProyectosView.vue'
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    // Ruta de Login (Solo para invitados)
     { path: '/login', component: LoginPage, meta: { guestOnly: true } },
+
+    // ---> NUEVA RUTA DE REGISTRO <---
+    // También es 'guestOnly' para que usuarios logueados no entren aquí
+    { path: '/registro', component: RegisterView, meta: { guestOnly: true } },
 
     {
       path: '/',
@@ -58,10 +67,12 @@ const router = createRouter({
 router.beforeEach((to) => {
   const token = localStorage.getItem('token')
 
+  // Si requiere auth y no hay token -> va al Login
   if (to.meta.requiresAuth && !token) {
     return { path: '/login', query: { redirect: to.fullPath } }
   }
 
+  // Si es solo para invitados (Login o Registro) y ya hay token -> va al Mapa
   if (to.meta.guestOnly && token) {
     return { path: '/mapa' }
   }

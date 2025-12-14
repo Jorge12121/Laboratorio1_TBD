@@ -110,10 +110,18 @@ const login = async () => {
         </button>
 
         <div v-if="error" class="alert error">{{ error }}</div>
+        <div style="margin-top: 15px; text-align: center;">
+          <small>¿No tienes cuenta? 
+            <router-link to="/registro" style="color: #42b983; font-weight: bold;">Regístrate aquí</router-link>
+          </small>
+        </div>
       </form>
     </div>
   </div>
+  
 </template>
+
+
 
 <style scoped>
 .login-page{
