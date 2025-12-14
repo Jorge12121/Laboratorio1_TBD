@@ -1,7 +1,6 @@
-<!-- BDA_frontend/src/views/SimulacionView.vue -->
 <script setup>
 import { ref } from 'vue'
-import api from '@/services/api'
+import ReporteService from '@/services/ReporteService'
 
 const idZona = ref('')
 const nuevasViviendas = ref('')
@@ -20,7 +19,9 @@ const simular = async () => {
   mensaje.value = ''
 
   try {
-    await api.patch(`/api/datos_demograficos/simular_crecimiento/id_zona/${idZona.value}/casas/${nuevasViviendas.value}`)
+    console.log('idZona:', idZona.value, 'nuevasViviendas:', nuevasViviendas.value)
+
+    await ReporteService.simularCrecimiento(idZona.value, nuevasViviendas.value)
     mensaje.value = `✓ Simulación exitosa: ${nuevasViviendas.value} viviendas agregadas a la zona ${idZona.value}`
     idZona.value = ''
     nuevasViviendas.value = ''
@@ -45,12 +46,12 @@ const simular = async () => {
     <form @submit.prevent="simular" class="form-card">
       <label class="label">
         ID de Zona
-        <input v-model.number="idZona" class="input" type="number" min="1" placeholder="Ej: 5" required />
+        <input v-model="idZona" class="input" type="number" min="1" placeholder="Ej: 5" required />
       </label>
 
       <label class="label">
         Nuevas Viviendas
-        <input v-model.number="nuevasViviendas" class="input" type="number" min="1" placeholder="Ej: 100" required />
+        <input v-model="nuevasViviendas" class="input" type="number" min="1" placeholder="Ej: 100" required />
       </label>
 
       <button class="btn primary" type="submit" :disabled="cargando">
@@ -69,7 +70,14 @@ const simular = async () => {
 
 <style scoped>
 .page { display: grid; gap: 12px; }
-.page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+
+.page-head {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: flex-start;
+  gap: 12px;
+}
 
 .form-card {
   background: rgba(255,255,255,.03);
@@ -79,6 +87,8 @@ const simular = async () => {
   display: grid;
   gap: 14px;
   max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .label {
@@ -95,5 +105,9 @@ const simular = async () => {
   background: rgba(255,255,255,.03);
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,.08);
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
 }
+
 </style>

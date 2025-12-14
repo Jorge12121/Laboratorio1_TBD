@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import api from '@/services/api'
+import ReporteService from '@/services/ReporteService'
 
 const superposiciones = ref([])
 const error = ref('')
@@ -11,7 +11,7 @@ const cargar = async () => {
   error.value = ''
 
   try {
-    const response = await api.get('/api/reportes/superposicion-proyectos')
+    const response = await ReporteService.obtenerSuperposicion()
     superposiciones.value = response.data
   } catch (e) {
     console.error(e)
@@ -46,7 +46,7 @@ const formatearNumero = (n) => {
     <div v-else-if="cargando" class="alert">Cargando datos…</div>
 
     <div v-else>
-      <table class="table table--danger">
+      <table class="table table--warn">
         <thead>
           <tr>
             <th>Proyecto A</th>

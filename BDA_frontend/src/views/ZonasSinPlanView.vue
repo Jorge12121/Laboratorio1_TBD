@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted } from 'vue'
-import api from '@/services/api'
+import ReporteService from '@/services/ReporteService'
 
 const zonas = ref([])
 const error = ref('')
@@ -11,7 +11,7 @@ const cargar = async () => {
   error.value = ''
 
   try {
-    const response = await api.get('/api/reportes/zonas-sin-planificacion')
+    const response = await ReporteService.obtenerZonasSinPlan()
     zonas.value = response.data
   } catch (e) {
     console.error(e)

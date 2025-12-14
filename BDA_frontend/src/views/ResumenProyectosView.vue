@@ -1,7 +1,8 @@
 <!-- BDA_frontend/src/views/ResumenProyectosView.vue -->
 <script setup>
 import { ref, onMounted, computed } from 'vue'
-import api from '@/services/api'
+import ReporteService from '@/services/ReporteService'
+import UtilService from '@/services/UtilService'
 
 const resumen = ref([])
 const error = ref('')
@@ -12,7 +13,7 @@ const cargar = async () => {
   error.value = ''
 
   try {
-    const response = await api.get('/api/reportes/resumen-proyectos')
+    const response = await ReporteService.obtenerResumenProyectos()
     resumen.value = response.data
   } catch (e) {
     console.error(e)
@@ -28,7 +29,7 @@ const refrescar = async () => {
 
   try {
     // Primero refrescamos la vista materializada
-    await api.post('/api/reportes/refrescar-resumen')
+    await UtilService.actualizarResumenProyectos()
     // Luego recargamos los datos
     await cargar()
   } catch (e) {

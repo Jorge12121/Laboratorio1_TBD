@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue'
-import api from '@/services/api'
+import ReporteService from '@/services/ReporteService'
 
 const idUsuario = ref('')
 const mensaje = ref('')
@@ -18,7 +18,7 @@ const actualizar = async () => {
   mensaje.value = ''
 
   try {
-    await api.patch(`/api/proyectos/retrasos/id_usuario/${idUsuario.value}`)
+    await ReporteService.actualizarRetrasados(idUsuario.value)
     mensaje.value = `✓ Proyectos del usuario ${idUsuario.value} actualizados correctamente`
     idUsuario.value = ''
   } catch (e) {
@@ -57,7 +57,14 @@ const actualizar = async () => {
 
 <style scoped>
 .page { display: grid; gap: 12px; }
-.page-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+
+.page-head {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: flex-start;
+  gap: 12px;
+}
 
 .form-card {
   background: rgba(255,255,255,.03);
@@ -67,6 +74,8 @@ const actualizar = async () => {
   display: grid;
   gap: 14px;
   max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .label {

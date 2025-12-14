@@ -1,19 +1,22 @@
-<!-- BDA_frontend/src/views/CoberturaView.vue -->
 <script setup>
-import { ref, onMounted } from 'vue'
-import api from '@/services/api'
+import { ref, onMounted, computed } from 'vue'
+import ReporteService from '@/services/ReporteService'
 
 const cobertura = ref([])
 const error = ref('')
 const cargando = ref(true)
+
+const pageSize = 10
+const page = ref(1) // 1..n
 
 const cargar = async () => {
   cargando.value = true
   error.value = ''
 
   try {
-    const response = await api.get('/api/reportes/cobertura')
-    cobertura.value = response.data
+    const response = await ReporteService.obtenerCobertura()
+    cobertura.value = response.data ?? []
+    page.value = 1 // reset al refrescar
   } catch (e) {
     console.error(e)
     error.value = 'No se pudo obtener el reporte de cobertura.'
@@ -23,6 +26,29 @@ const cargar = async () => {
 }
 
 onMounted(cargar)
+
+//total páginas
+const totalPages = computed(() => {
+  const total = cobertura.value.length
+  return Math.max(1, Math.ceil(total / pageSize))
+})
+
+// slice de la página actual
+const filasPaginadas = computed(() => {
+  const start = (page.value - 1) * pageSize
+  return cobertura.value.slice(start, start + pageSize)
+})
+
+const puedeAtras = computed(() => page.value > 1)
+const puedeAdelante = computed(() => page.value < totalPages.value)
+
+const atras = () => {
+  if (puedeAtras.value) page.value -= 1
+}
+
+const adelante = () => {
+  if (puedeAdelante.value) page.value += 1
+}
 
 const formatearNumero = (n) => {
   if (n === null || n === undefined) return '-'
@@ -64,15 +90,15 @@ const getColorBarra = (total) => {
         <thead>
           <tr>
             <th>Zona</th>
-            <th>🏥 Hospitales</th>
-            <th>🏫 Escuelas</th>
-            <th>🌳 Parques</th>
+            <th>Hospitales</th>
+            <th>Escuelas</th>
+            <th>Parques</th>
             <th>Total</th>
             <th>Cobertura</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="item in cobertura" :key="item.id_zona">
+          <tr v-for="item in filasPaginadas" :key="item.id_zona">
             <td><strong>{{ item.nombre_zona }}</strong></td>
             <td>{{ formatearNumero(item.hospitales) }}</td>
             <td>{{ formatearNumero(item.escuelas) }}</td>
@@ -96,6 +122,21 @@ const getColorBarra = (total) => {
           </tr>
         </tbody>
       </table>
+
+      <!-- footer paginacion -->
+      <div v-if="cobertura.length > 0" class="pager">
+        <button class="btn" type="button" @click="atras" :disabled="!puedeAtras">
+          ← Anterior
+        </button>
+
+        <div class="pager-info">
+          Página {{ page }} de {{ totalPages }}
+        </div>
+
+        <button class="btn" type="button" @click="adelante" :disabled="!puedeAdelante">
+          Siguiente →
+        </button>
+      </div>
 
       <div class="hint">
         <strong>Nota:</strong> Esta vista se actualiza semanalmente. Los datos reflejan el conteo actual de puntos de interés por zona.

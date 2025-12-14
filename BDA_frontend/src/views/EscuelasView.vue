@@ -117,17 +117,4 @@ const formatearNumero = (n) => {
 <style scoped>
 .page{ display:grid; gap:12px; }
 .page-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
-
-.pager{
-  margin-top: 12px;
-  display: flex;
-  justify-content: space-between; /* izquierda y derecha */
-  align-items: center;
-  gap: 12px;
-}
-
-.pager-info{
-  font-size: 12px;
-  opacity: .8;
-}
 </style>

@@ -101,6 +101,19 @@ p { margin: 0 0 12px; color: var(--muted); }
   background: var(--panel-2); /* evita que cambie en hover */
 }
 
+.pager{
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between; /* izquierda y derecha */
+  align-items: center;
+  gap: 12px;
+}
+
+.pager-info{
+  font-size: 12px;
+  opacity: .8;
+}
+
 /* ====== Inputs ====== */
 .input{
   width: 100%;
