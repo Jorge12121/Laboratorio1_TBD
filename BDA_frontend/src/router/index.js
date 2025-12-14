@@ -11,6 +11,10 @@ import EscasezView from '../views/EscasezView.vue'
 import ProyectosView from '../views/ProyectosView.vue'
 import EscuelasView from '../views/EscuelasView.vue'
 import CrecimientoView from '../views/CrecimientoView.vue'
+import SimulacionView from '../views/SimulacionView.vue'
+import ActualizarRetrasadosView from '../views/ActualizarRetrasadosView.vue'
+import ZonasSinPlanView from '../views/ZonasSinPlanView.vue'
+import SuperposicionView from '../views/SuperposicionView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -31,6 +35,10 @@ const router = createRouter({
         { path: 'consultas/escasez', component: EscasezView },
         { path: 'consultas/escuelas', component: EscuelasView },
         { path: 'consultas/crecimiento', component: CrecimientoView },
+        { path: 'consultas/simulacion', component: SimulacionView },
+        { path: 'consultas/actualizar-retrasados', component: ActualizarRetrasadosView },
+        { path: 'consultas/zonas-sin-plan', component: ZonasSinPlanView },
+        { path: 'consultas/superposicion', component: SuperposicionView },
 
         { path: 'proyectos', component: ProyectosView },
       ],

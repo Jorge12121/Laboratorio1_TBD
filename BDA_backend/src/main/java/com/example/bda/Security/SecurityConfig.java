@@ -30,18 +30,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // <--- 1. ACTIVAMOS CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll() // Login y registro públicos
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // <--- 2. Permitir "pre-flight" del navegador
-
-                        // Esto permite que cualquiera (Postman) entre a los reportes sin token (PARA PRUEBAS)
+                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ Esto ya lo tienes
                         .requestMatchers("/api/reportes/**").permitAll()
-                        .requestMatchers("/api/datos_demograficos/**").permitAll()
+                        .requestMatchers("/api/datos_demograficos/**").permitAll() // ✅ Verifica esto
                         .requestMatchers("/api/proyectos/**").permitAll()
-                        .requestMatchers("/api/usuarios/registro").permitAll() //Este se debe dejar para permitir registro sin logeo
-
-                        .anyRequest().authenticated() // El resto privado
+                        .requestMatchers("/api/usuarios/registro").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
@@ -49,24 +46,16 @@ public class SecurityConfig {
         return http.build();
     }
 
-    // 3. DEFINIMOS LAS REGLAS DE CORS
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        // Permitir el origen de tu Frontend Vue (Puerto 5173)
-        configuration.setAllowedOrigins(List.of("http://localhost:5173"));
-
-        // Permitir métodos comunes
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        // Permitir cabeceras (especialmente Authorization para el token)
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-
-        configuration.setAllowCredentials(true);
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(List.of("http://localhost:5173"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // ✅ Asegúrate de incluir PATCH
+        config.setAllowedHeaders(List.of("*"));
+        config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", config);
         return source;
     }
 

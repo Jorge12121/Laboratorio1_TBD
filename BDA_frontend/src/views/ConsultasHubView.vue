@@ -40,30 +40,30 @@
           <p>Reporte de crecimiento (según backend).</p>
         </RouterLink>
 
-        <div class="card muted-card">
+        <RouterLink class="card link-card" to="/consultas/simulacion">
           <h4>6) Simulación crecimiento (SP)</h4>
-          <p>Próximamente.</p>
-        </div>
+          <p>Proyectar impacto de nuevas viviendas.</p>
+        </RouterLink>
       </div>
     </div>
 
     <div class="section">
       <h4 class="section-title">Planificación / Proyectos</h4>
       <div class="grid">
-        <div class="card muted-card">
-          <h4>7) Actualizar “Retrasado” (SP)</h4>
-          <p>Próximamente.</p>
-        </div>
+        <RouterLink class="card link-card" to="/consultas/actualizar-retrasados">
+          <h4>7) Actualizar "Retrasado" (SP)</h4>
+          <p>Marcar proyectos vencidos.</p>
+        </RouterLink>
 
-        <div class="card muted-card">
+        <RouterLink class="card link-card" to="/consultas/zonas-sin-plan">
           <h4>8) Zonas sin planificación</h4>
-          <p>Próximamente.</p>
-        </div>
+          <p>Zonas sin proyectos en 2 años.</p>
+        </RouterLink>
 
-        <div class="card muted-card">
+        <RouterLink class="card link-card" to="/consultas/superposicion">
           <h4>9) Superposición de proyectos</h4>
-          <p>Próximamente.</p>
-        </div>
+          <p>Detectar conflictos geográficos.</p>
+        </RouterLink>
 
         <div class="card muted-card">
           <h4>10) Resumen (VM)</h4>
