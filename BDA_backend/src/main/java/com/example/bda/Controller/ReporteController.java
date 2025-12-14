@@ -7,12 +7,10 @@ import com.example.bda.Repository.ProyectoRepository;
 import com.example.bda.Repository.ZonaRepository;
 import com.example.bda.Services.ReporteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Map;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -47,10 +45,25 @@ public class ReporteController {
         return reporteService.obtenerZonasRapidoCrecimiento();
     }
 
+    @GetMapping("/cobertura")
+    public List<Map<String, Object>> verCobertura() {
+        return reporteService.obtenerCobertura();
+    }
+
     @GetMapping("/zonas-sin-planificacion")
     public List<Map<String, Object>> getZonasOlvidadas() { return zonaRepository.obtenerZonasSinPlanificacion(); }
 
     @GetMapping("/superposicion-proyectos")
     public List<Map<String, Object>> getSuperposicionProyectos() { return proyectoRepository.obtenerProyectosSuperpuestos(); }
+
+    @GetMapping("/resumen-proyectos")
+    public List<Map<String, Object>> verResumenProyectos() {
+        return reporteService.obtenerResumenProyectos();
+    }
+
+    @PostMapping("/refrescar-resumen")
+    public void refrescarResumen() {
+        reporteService.refrescarResumenProyectos();
+    }
 
 }

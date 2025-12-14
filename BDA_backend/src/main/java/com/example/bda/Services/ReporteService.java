@@ -30,4 +30,16 @@ public class ReporteService {
     public List<ZonasRapidoCrecimientoDTO> obtenerZonasRapidoCrecimiento() {
         return reporteRepository.obtenerZonasRapidoCrecimiento();
     }
+
+    public List<Map<String, Object>> obtenerCobertura() {
+        return reporteRepository.obtenerCobertura();
+    }
+
+    public List<Map<String, Object>> obtenerResumenProyectos() {
+        return reporteRepository.obtenerResumenProyectos();
+    }
+
+    public void refrescarResumenProyectos() {
+        reporteRepository.refrescarResumenProyectos();
+    }
 }

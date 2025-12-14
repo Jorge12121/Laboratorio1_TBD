@@ -17,13 +17,13 @@
 
         <RouterLink class="card link-card" to="/consultas/escuelas">
           <h4>3) Escuelas</h4>
-          <p>Reporte relacionado a escuelas (según backend).</p>
+          <p>Escuelas cercanas a proyectos en curso.</p>
         </RouterLink>
 
-        <div class="card muted-card">
+        <RouterLink class="card link-card" to="/consultas/cobertura">
           <h4>5) Cobertura (VM)</h4>
-          <p>Próximamente.</p>
-        </div>
+          <p>Vista materializada de infraestructura por zona.</p>
+        </RouterLink>
       </div>
     </div>
 
@@ -65,10 +65,10 @@
           <p>Detectar conflictos geográficos.</p>
         </RouterLink>
 
-        <div class="card muted-card">
+        <RouterLink class="card link-card" to="/consultas/resumen-proyectos">
           <h4>10) Resumen (VM)</h4>
-          <p>Próximamente.</p>
-        </div>
+          <p>Proyectos por estado y tipo de zona.</p>
+        </RouterLink>
       </div>
     </div>
   </div>

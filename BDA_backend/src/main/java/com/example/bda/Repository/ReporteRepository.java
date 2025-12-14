@@ -78,5 +78,22 @@ public class ReporteRepository {
                         rs.getFloat("crecimiento")
                 ));
     }
+
+    // 5. COBERTURA DE INFRAESTRUCTURA (Vista Materializada)
+    public List<Map<String, Object>> obtenerCobertura() {
+        String sql = "SELECT * FROM vista_cobertura_infraestructura ORDER BY nombre_zona";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    // 10. RESUMEN DE PROYECTOS POR ESTADO Y TIPO (Vista Materializada)
+    public List<Map<String, Object>> obtenerResumenProyectos() {
+        String sql = "SELECT * FROM vista_resumen_proyectos_estado_zona ORDER BY tipo_zona, estado";
+        return jdbcTemplate.queryForList(sql);
+    }
+
+    // Refrescar Vista Materializada de Resumen
+    public void refrescarResumenProyectos() {
+        jdbcTemplate.execute("REFRESH MATERIALIZED VIEW CONCURRENTLY vista_resumen_proyectos_estado_zona");
+    }
     
 }
