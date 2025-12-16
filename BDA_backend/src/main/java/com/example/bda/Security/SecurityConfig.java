@@ -32,12 +32,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ Esto ya lo tienes
-                        .requestMatchers("/api/reportes/**").permitAll()
-                        .requestMatchers("/api/datos_demograficos/**").permitAll() // ✅ Verifica esto
-                        .requestMatchers("/api/proyectos/**").permitAll()
-                        .requestMatchers("/api/usuarios/registro").permitAll()
+                        // 1. ZONA PÚBLICA (White list)
+                        .requestMatchers("/auth/**").permitAll()          // Login público
+                        .requestMatchers("/api/usuarios/registro").permitAll() // Registro público
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                        // 2. ZONA PRIVADA (Solo usuarios autenticados)
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -46,11 +46,12 @@ public class SecurityConfig {
         return http.build();
     }
 
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); // ✅ Asegúrate de incluir PATCH
+        config.setAllowedOrigins(List.of("http://localhost:5173")); //Ruta de front
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")); //Tipos de solicitudes
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
 

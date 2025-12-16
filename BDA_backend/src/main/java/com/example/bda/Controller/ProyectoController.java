@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "*") // Importante para evitar CORS
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/api/proyectos")
 public class ProyectoController {

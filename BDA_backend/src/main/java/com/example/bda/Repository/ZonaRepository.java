@@ -12,7 +12,7 @@ public class ZonaRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-
+    // 8. ZONA SIN PLANIFICACIÓN
     public List<Map<String, Object>> obtenerZonasSinPlanificacion() {
         String sql = """
             SELECT 
@@ -29,7 +29,6 @@ public class ZonaRepository {
                 OR 
                 MAX(p.fecha_inicio) IS NULL
         """;
-
         // Ejecutamos la consulta y Spring mapea automáticamente las columnas a un Map
         return jdbcTemplate.queryForList(sql);
     }

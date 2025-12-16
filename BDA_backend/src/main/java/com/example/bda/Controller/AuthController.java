@@ -24,12 +24,12 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
-        // Autentica usando Spring Security (esto llama a tu CustomUserDetailsService)
+        // Autenticacion usando Spring Security.
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
 
-        // Si pasa la línea anterior, las credenciales son correctas
+        // Si pasa la línea anterior, las credenciales son correctas y se genera un token
         String token = jwtUtil.generateToken(request.getEmail());
 
         return ResponseEntity.ok(Collections.singletonMap("token", token));

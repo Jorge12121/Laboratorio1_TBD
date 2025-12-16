@@ -16,16 +16,14 @@ public class UsuarioRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // RowMapper manual para mapear tus campos específicos (snake_case) a la clase
+    // RowMapper manual para mapear campos específicos (snake_case) a la clase
     private final RowMapper<usuarios> usuarioRowMapper = new RowMapper<usuarios>() {
         @Override
         public usuarios mapRow(ResultSet rs, int rowNum) throws SQLException {
             usuarios u = new usuarios();
-            // Asumiendo que en la BD la columna se llama id_usuario
-            // u.setId_usuario(rs.getInt("id_usuario")); // Si tienes el setter
             u.setNombre(rs.getString("nombre"));
             u.setEmail(rs.getString("email"));
-            u.setContrasena_hash(rs.getString("contrasena_hash")); // Tu campo específico
+            u.setContrasena_hash(rs.getString("contrasena_hash"));
             u.setRol(rs.getString("rol"));
             return u;
         }

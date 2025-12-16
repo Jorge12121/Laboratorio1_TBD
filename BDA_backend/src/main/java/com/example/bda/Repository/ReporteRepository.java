@@ -15,7 +15,7 @@ public class ReporteRepository {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-    // 1. DENSIDAD (Ajustado para calcular usando area_km2)
+    // 1. DENSIDAD
     public List<Map<String, Object>> obtenerDensidad() {
         String sql = "SELECT z.nombre, ROUND((d.poblacion::numeric / z.area_km2::numeric), 2) as densidad " +
                      "FROM datos_demograficos d " +
@@ -62,7 +62,7 @@ public class ReporteRepository {
                 ));
     }
 
-    // 4. Zona de Rápido Crecimiento
+    // 4. ZONA DE RAPIDO CRECIMIENTO
     public List<ZonasRapidoCrecimientoDTO> obtenerZonasRapidoCrecimiento() {
         //dd es datos_demograficos despues, los más recientes y da es datos_demograficos antes
         String sql = "SELECT z.nombre AS nombreZona, ((dd.poblacion - da.poblacion)::float / da.poblacion) * 100 AS crecimiento " +

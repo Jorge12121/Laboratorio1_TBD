@@ -11,8 +11,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
 
-    // En producción, pon esto en application.properties
-    private static final String SECRET_KEY = "mi_clave_secreta_super_segura_taller_bd";
+    private static final String SECRET_KEY = "mi_clave_secreta";
 
     public String generateToken(String email) {
         return JWT.create()

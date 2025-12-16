@@ -17,14 +17,14 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        // 1. Buscamos el usuario en la BD usando tu repositorio SQL nativo
+        // 1. Buscamos el usuario en la BD
         usuarios usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
 
-        // 2. Convertimos tu clase 'usuarios' al estándar 'UserDetails' de Spring
+        // 2. Convertimos la clase 'usuarios' al estándar 'UserDetails' de Spring
         return User.builder()
                 .username(usuario.getEmail())
-                .password(usuario.getContrasena_hash()) // ASUMÍ este campo basándome en tu modelo
+                .password(usuario.getContrasena_hash())
                 .roles(usuario.getRol() != null ? usuario.getRol() : "USER")
                 .build();
     }
