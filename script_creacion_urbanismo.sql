@@ -211,5 +211,24 @@ END;
 $$ LANGUAGE plpgsql;
 
 -- ================================================================
+-- 12. TRIGGER: validar_punto_en_zona
+-- ================================================================
+CREATE OR REPLACE FUNCTION validar_punto_en_zona()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.geom IS NOT NULL AND NEW.id_zona IS NOT NULL THEN
+       IF NOT EXISTS (
+            SELECT 1 FROM zonas_urbanas
+            WHERE id = NEW.id_zona
+            AND ST_Contains(geom, NEW.geom)
+       ) THEN
+            RAISE EXCEPTION 'El punto de interés debe estar dentro de la zona urbana asignada';
+       END IF;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpsql;
+
+-- ================================================================
 -- FIN DEL ARCHIVO
 -- ================================================================
