@@ -71,6 +71,31 @@
         </RouterLink>
       </div>
     </div>
+
+    <div class="section">
+      <h4 class="section-title">🗺️ Consultas Espaciales (PostGIS)</h4>
+      <div class="grid">
+        <RouterLink class="card link-card spatial-card" to="/consultas/densidad-real">
+          <h4>📐 Densidad Real</h4>
+          <p>Cálculo con ST_Area (población / área real en km²).</p>
+        </RouterLink>
+
+        <RouterLink class="card link-card spatial-card" to="/consultas/escuelas-cercanas">
+          <h4>🏫 Escuelas Cercanas</h4>
+          <p>Análisis de proximidad con ST_DWithin (< 500m).</p>
+        </RouterLink>
+
+        <RouterLink class="card link-card spatial-card" to="/consultas/proyectos-superpuestos">
+          <h4>⚠️ Superposición de Proyectos</h4>
+          <p>Conflictos con ST_Intersects y ST_Intersection.</p>
+        </RouterLink>
+
+        <RouterLink class="card link-card spatial-card" to="/consultas/cobertura-hospitales">
+          <h4>🏥 Cobertura Hospitales</h4>
+          <p>Buffer de 1km con ST_Buffer y ST_Intersection.</p>
+        </RouterLink>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -104,6 +129,16 @@
   color: inherit;
   display: grid;
   gap: 6px;
+}
+
+.spatial-card {
+  background: linear-gradient(135deg, #667eea22 0%, #764ba222 100%);
+  border: 1px solid #667eea44;
+}
+
+.spatial-card:hover {
+  border-color: #667eea;
+  background: linear-gradient(135deg, #667eea33 0%, #764ba233 100%);
 }
 
 .muted-card{

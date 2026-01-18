@@ -22,6 +22,12 @@ import ZonasSinPlanView from '../views/ZonasSinPlanView.vue'
 import SuperposicionView from '../views/SuperposicionView.vue'
 import ResumenProyectosView from '../views/ResumenProyectosView.vue'
 
+// Nuevas vistas de consultas espaciales
+import DensidadRealView from '../views/DensidadRealView.vue'
+import EscuelasCercanasView from '../views/EscuelasCercanasView.vue'
+import ProyectosSuperpuestosView from '../views/ProyectosSuperpuestosView.vue'
+import CoberturaHospitalesView from '../views/CoberturaHospitalesView.vue'
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -52,6 +58,12 @@ const router = createRouter({
         { path: 'consultas/zonas-sin-plan', component: ZonasSinPlanView },
         { path: 'consultas/superposicion', component: SuperposicionView },
         { path: 'consultas/resumen-proyectos', component: ResumenProyectosView },
+
+        // Nuevas rutas de consultas espaciales
+        { path: 'consultas/densidad-real', component: DensidadRealView },
+        { path: 'consultas/escuelas-cercanas', component: EscuelasCercanasView },
+        { path: 'consultas/proyectos-superpuestos', component: ProyectosSuperpuestosView },
+        { path: 'consultas/cobertura-hospitales', component: CoberturaHospitalesView },
 
         { path: 'proyectos', component: ProyectosView },
       ],

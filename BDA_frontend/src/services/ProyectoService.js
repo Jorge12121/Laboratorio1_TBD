@@ -1,7 +1,7 @@
 import api from './api'; // Importamos nuestra instancia configurada
 
 // URL específica para este recurso (siguiendo tu ejemplo)
-// Nota: Como 'api' ya tiene la base 'http://localhost:8090', aquí solo ponemos la ruta relativa.
+// Nota: Como 'api' ya tiene la base 'http://localhost:8080', aquí solo ponemos la ruta relativa.
 const RESOURCE_URL = '/api/proyectos';
 
 class ProyectoService {

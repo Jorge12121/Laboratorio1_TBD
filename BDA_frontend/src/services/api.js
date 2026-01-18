@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Definimos la URL base general del Backend
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8090';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
 const api = axios.create({ //Api creada usa axios
   baseURL: API_URL,
