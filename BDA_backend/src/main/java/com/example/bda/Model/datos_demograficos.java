@@ -9,6 +9,14 @@ public class datos_demograficos {
     private float densidad;
     private float edad_promedio;
 
+    public int getId_datos() {
+        return id_datos;
+    }
+
+    public void setId_datos(int id_datos) {
+        this.id_datos = id_datos;
+    }
+
     public int getId_zona() {
         return id_zona;
     }

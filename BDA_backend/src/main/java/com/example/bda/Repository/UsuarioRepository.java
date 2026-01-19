@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,6 +22,7 @@ public class UsuarioRepository {
         @Override
         public usuarios mapRow(ResultSet rs, int rowNum) throws SQLException {
             usuarios u = new usuarios();
+            u.setId_usuario(rs.getInt("id"));
             u.setNombre(rs.getString("nombre"));
             u.setEmail(rs.getString("email"));
             u.setContrasena_hash(rs.getString("contrasena_hash"));
@@ -29,6 +31,69 @@ public class UsuarioRepository {
         }
     };
 
+    // CREATE
+    public int create(usuarios usuario) {
+        String sql = "INSERT INTO usuarios (nombre, email, contrasena_hash, rol) VALUES (?, ?, ?, ?) RETURNING id";
+        return jdbcTemplate.queryForObject(sql, Integer.class,
+                usuario.getNombre(),
+                usuario.getEmail(),
+                usuario.getContrasena_hash(),
+                usuario.getRol());
+    }
+
+    // READ - Obtener todos
+    public List<usuarios> findAll() {
+        String sql = "SELECT * FROM usuarios ORDER BY id";
+        return jdbcTemplate.query(sql, usuarioRowMapper);
+    }
+
+    // READ - Obtener con paginación
+    public List<usuarios> findAllPaginated(int page, int size) {
+        int offset = page * size;
+        String sql = "SELECT * FROM usuarios ORDER BY id LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, usuarioRowMapper, size, offset);
+    }
+
+    // READ - Contar total
+    public int count() {
+        String sql = "SELECT COUNT(*) FROM usuarios";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
+    }
+
+    // READ - Obtener por ID
+    public usuarios findById(int id) {
+        String sql = "SELECT * FROM usuarios WHERE id = ?";
+        List<usuarios> results = jdbcTemplate.query(sql, usuarioRowMapper, id);
+        return results.isEmpty() ? null : results.get(0);
+    }
+
+    // UPDATE
+    public int update(int id, usuarios usuario) {
+        String sql = "UPDATE usuarios SET nombre = ?, email = ?, contrasena_hash = ?, rol = ? WHERE id = ?";
+        return jdbcTemplate.update(sql, usuario.getNombre(), usuario.getEmail(), 
+                usuario.getContrasena_hash(), usuario.getRol(), id);
+    }
+
+    // DELETE
+    public int delete(int id) {
+        String sql = "DELETE FROM usuarios WHERE id = ?";
+        return jdbcTemplate.update(sql, id);
+    }
+
+    // QUERIES SIMPLES
+    // Buscar por rol
+    public List<usuarios> findByRol(String rol) {
+        String sql = "SELECT * FROM usuarios WHERE rol = ? ORDER BY nombre";
+        return jdbcTemplate.query(sql, usuarioRowMapper, rol);
+    }
+
+    // Buscar por nombre (búsqueda parcial)
+    public List<usuarios> findByNombre(String nombre) {
+        String sql = "SELECT * FROM usuarios WHERE nombre ILIKE ? ORDER BY nombre";
+        return jdbcTemplate.query(sql, usuarioRowMapper, "%" + nombre + "%");
+    }
+
+    // MÉTODOS EXISTENTES PARA AUTENTICACIÓN
     public Optional<usuarios> findByEmail(String email) {
         String sql = "SELECT * FROM usuarios WHERE email = ?";
         try {

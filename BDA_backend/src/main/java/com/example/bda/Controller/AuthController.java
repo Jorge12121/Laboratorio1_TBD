@@ -23,15 +23,32 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginRequest request) {
-        // Autenticacion usando Spring Security.
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+        try {
+            System.out.println("=== LOGIN ATTEMPT ===");
+            System.out.println("Email: " + request.getEmail());
+            System.out.println("Password length: " + (request.getPassword() != null ? request.getPassword().length() : "null"));
+            
+            // Autenticacion usando Spring Security.
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
 
-        // Si pasa la línea anterior, las credenciales son correctas y se genera un token
-        String token = jwtUtil.generateToken(request.getEmail());
+            System.out.println("✅ Authentication successful");
+            
+            // Si pasa la línea anterior, las credenciales son correctas y se genera un token
+            String token = jwtUtil.generateToken(request.getEmail());
+            System.out.println("✅ Token generated");
 
-        return ResponseEntity.ok(Collections.singletonMap("token", token));
+            return ResponseEntity.ok(Collections.singletonMap("token", token));
+            
+        } catch (Exception e) {
+            System.err.println("❌ LOGIN ERROR: " + e.getClass().getSimpleName());
+            System.err.println("Message: " + e.getMessage());
+            e.printStackTrace();
+            
+            return ResponseEntity.status(401)
+                    .body(Collections.singletonMap("message", "Credenciales inválidas"));
+        }
     }
 }

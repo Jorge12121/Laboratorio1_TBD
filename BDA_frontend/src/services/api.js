@@ -17,14 +17,18 @@ api.interceptors.request.use((config) => {
 });
 
 // Interceptor: Si recibimos un 401, redirigimos al login
+// Para 403, dejamos que el componente maneje el error
 api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err?.response?.status === 401) {
-      localStorage.removeItem('token')
-      window.location.href = '/login'
+      console.error('Token inválido o expirado. Redirigiendo al login...');
+      localStorage.removeItem('token');
+      localStorage.removeItem('userName');
+      window.location.href = '/login';
     }
-    return Promise.reject(err)
+    // 403 puede ser por permisos, no necesariamente token inválido
+    return Promise.reject(err);
   }
 )
 

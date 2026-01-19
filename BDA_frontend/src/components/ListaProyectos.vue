@@ -13,11 +13,17 @@ const cargar = async () => {
   error.value = ''
 
   try {
+    console.log('Cargando proyectos... Token:', localStorage.getItem('token') ? 'presente' : 'ausente')
     const response = await ProyectoService.obtenerTodos()
     proyectos.value = response.data
+    console.log('Proyectos cargados:', proyectos.value.length)
   } catch (e) {
-    console.error(e)
-    error.value = 'No se pudieron cargar los proyectos.'
+    console.error('Error al cargar proyectos:', e)
+    if (e?.response?.status === 403) {
+      error.value = 'No tienes permisos para acceder a los proyectos. Por favor, inicia sesión nuevamente.'
+    } else {
+      error.value = 'No se pudieron cargar los proyectos.'
+    }
   } finally {
     cargando.value = false
   }
@@ -93,7 +99,7 @@ const formatearFecha = (fecha) => {
     </div>
 
     <div v-else class="grid">
-      <div v-for="proy in proyectosFiltrados" :key="proy.id" class="card project-card">
+      <div v-for="proy in proyectosFiltrados" :key="proy.id_proyectos || proy.id" class="card project-card">
         <div class="row">
           <h4 class="name">{{ proy.nombre }}</h4>
           <span :class="badgeClass(proy.estado)">{{ proy.estado || 'Sin estado' }}</span>

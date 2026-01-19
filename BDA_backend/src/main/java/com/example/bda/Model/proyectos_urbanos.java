@@ -10,11 +10,19 @@ public class proyectos_urbanos {
     private LocalDate fecha_inicio;
     private LocalDate fecha_fin;
     private String estado;
-    private int id_zona;
-    private int id_usuario;
+    private Integer id_zona;
+    private Integer id_usuario;
     private String ubicacion;
-    private double latitud;
-    private double longitud;
+    private Double latitud;
+    private Double longitud;
+
+    public int getId_proyectos() {
+        return id_proyectos;
+    }
+
+    public void setId_proyectos(int id_proyectos) {
+        this.id_proyectos = id_proyectos;
+    }
 
     public String getNombre() {
         return nombre;
@@ -56,19 +64,19 @@ public class proyectos_urbanos {
         this.estado = estado;
     }
 
-    public int getId_zona() {
+    public Integer getId_zona() {
         return id_zona;
     }
 
-    public void setId_zona(int id_zona) {
+    public void setId_zona(Integer id_zona) {
         this.id_zona = id_zona;
     }
 
-    public int getId_usuario() {
+    public Integer getId_usuario() {
         return id_usuario;
     }
 
-    public void setId_usuario(int id_usuario) {
+    public void setId_usuario(Integer id_usuario) {
         this.id_usuario = id_usuario;
     }
 
@@ -80,19 +88,19 @@ public class proyectos_urbanos {
         this.ubicacion = ubicacion;
     }
 
-    public double getLatitud() {
+    public Double getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(double latitud) {
+    public void setLatitud(Double latitud) {
         this.latitud = latitud;
     }
 
-    public double getLongitud() {
+    public Double getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(double longitud) {
+    public void setLongitud(Double longitud) {
         this.longitud = longitud;
     }
 }

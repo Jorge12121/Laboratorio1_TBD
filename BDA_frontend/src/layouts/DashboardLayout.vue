@@ -43,6 +43,11 @@ const logout = () => {
         <RouterLink class="tab" to="/mapa">Mapa</RouterLink>
         <RouterLink class="tab" to="/consultas">Consultas</RouterLink>
         <RouterLink class="tab" to="/proyectos">Proyectos</RouterLink>
+        <RouterLink class="tab" to="/crud/proyectos">📝 Proyectos</RouterLink>
+        <RouterLink class="tab" to="/crud/datos-demograficos">📊 Demografía</RouterLink>
+        <RouterLink class="tab" to="/crud/usuarios">👥 Usuarios</RouterLink>
+        <RouterLink class="tab" to="/crud/zonas">🏙️ Zonas</RouterLink>
+        <RouterLink class="tab" to="/crud/puntos-interes">📍 Puntos</RouterLink>
       </nav>
     </header>
 

@@ -28,6 +28,14 @@ import EscuelasCercanasView from '../views/EscuelasCercanasView.vue'
 import ProyectosSuperpuestosView from '../views/ProyectosSuperpuestosView.vue'
 import CoberturaHospitalesView from '../views/CoberturaHospitalesView.vue'
 
+// Nuevas vistas CRUD
+import DatosDemograficosView from '../views/DatosDemograficosView.vue'
+import ProyectosCRUDView from '../views/ProyectosCRUDView.vue'
+import UsuariosCRUDView from '../views/UsuariosCRUDView.vue'
+import ZonasCRUDView from '../views/ZonasCRUDView.vue'
+import PuntosInteresCRUDView from '../views/PuntosInteresCRUDView.vue'
+import DiagnosticoView from '../views/DiagnosticoView.vue'
+
 const router = createRouter({
   history: createWebHistory(),
   routes: [
@@ -64,6 +72,16 @@ const router = createRouter({
         { path: 'consultas/escuelas-cercanas', component: EscuelasCercanasView },
         { path: 'consultas/proyectos-superpuestos', component: ProyectosSuperpuestosView },
         { path: 'consultas/cobertura-hospitales', component: CoberturaHospitalesView },
+
+        // Gestión CRUD
+        { path: 'crud/datos-demograficos', component: DatosDemograficosView },
+        { path: 'crud/proyectos', component: ProyectosCRUDView },
+        { path: 'crud/usuarios', component: UsuariosCRUDView },
+        { path: 'crud/zonas', component: ZonasCRUDView },
+        { path: 'crud/puntos-interes', component: PuntosInteresCRUDView },
+        
+        // Diagnóstico
+        { path: 'diagnostico', component: DiagnosticoView },
 
         { path: 'proyectos', component: ProyectosView },
       ],
