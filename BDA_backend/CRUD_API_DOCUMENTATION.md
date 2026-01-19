@@ -1,10 +1,10 @@
 # API REST - Documentación de Endpoints CRUD
 
-## 📋 Resumen
+##  Resumen
 
 Se han implementado operaciones CRUD completas con paginación y queries simples para todas las tablas del modelo.
 
-## 🚀 Nuevos Endpoints
+##  Nuevos Endpoints
 
 ### 1. Datos Demográficos (`/api/datos_demograficos`)
 
@@ -48,7 +48,7 @@ Se han implementado operaciones CRUD completas con paginación y queries simples
 
 ---
 
-### 3. Puntos de Interés (`/api/puntos-interes`) ⭐ NUEVO
+### 3. Puntos de Interés (`/api/puntos-interes`)  NUEVO
 
 **CRUD Básico:**
 - `GET /api/puntos-interes` - Obtener todos
@@ -105,7 +105,7 @@ Se han implementado operaciones CRUD completas con paginación y queries simples
 
 ---
 
-## 📊 Formato de Paginación
+##  Formato de Paginación
 
 Todos los endpoints con paginación devuelven:
 
@@ -124,7 +124,7 @@ Todos los endpoints con paginación devuelven:
 
 ---
 
-## 🔑 Cambios Importantes
+##  Cambios Importantes
 
 ### Campos ID en Modelos
 
@@ -144,34 +144,34 @@ El componente `ListaProyectos.vue` ahora acepta ambos formatos:
 
 ---
 
-## 📦 Servicios Frontend
+##  Servicios Frontend
 
 Se han creado servicios completos en el frontend:
 
 - `DatosDemograficosService.js` - CRUD + queries de datos demográficos
 - `ProyectoService.js` - CRUD + queries de proyectos (actualizado)
-- `PuntoInteresService.js` - CRUD + queries de puntos de interés ⭐
-- `UsuarioService.js` - CRUD + queries de usuarios ⭐
-- `ZonaService.js` - CRUD + queries de zonas ⭐
+- `PuntoInteresService.js` - CRUD + queries de puntos de interés 
+- `UsuarioService.js` - CRUD + queries de usuarios 
+- `ZonaService.js` - CRUD + queries de zonas 
 
 ---
 
-## 🎨 Vistas Frontend
+##  Vistas Frontend
 
 ### Nuevas vistas CRUD:
 - `/crud/datos-demograficos` - Gestión de datos demográficos con filtros
 - `/crud/proyectos` - CRUD completo de proyectos con modal
 
 ### Características:
-✅ Paginación funcional
-✅ Filtros por diferentes campos
-✅ Crear, editar y eliminar
-✅ Diseño responsive
-✅ Manejo de errores
+ Paginación funcional
+ Filtros por diferentes campos
+ Crear, editar y eliminar
+ Diseño responsive
+ Manejo de errores
 
 ---
 
-## 🔐 Seguridad
+##  Seguridad
 
 - Todos los endpoints requieren autenticación JWT
 - Las contraseñas se encriptan automáticamente con BCrypt
@@ -179,7 +179,7 @@ Se han creado servicios completos en el frontend:
 
 ---
 
-## 📝 Ejemplo de Uso
+##  Ejemplo de Uso
 
 ### Crear un proyecto:
 ```javascript
@@ -220,7 +220,7 @@ const parques = await ProyectoService.obtenerPorNombre("parque")
 
 ---
 
-## 🚨 Notas de Migración
+##  Notas de Migración
 
 Si tu código frontend usa el antiguo formato, considera:
 
@@ -231,7 +231,7 @@ Si tu código frontend usa el antiguo formato, considera:
 
 ---
 
-## ✅ Checklist de Implementación
+##  Checklist de Implementación
 
 - [x] Modelos actualizados con getters/setters de IDs
 - [x] Repositories con RowMappers y operaciones CRUD
@@ -244,5 +244,3 @@ Si tu código frontend usa el antiguo formato, considera:
 - [x] Documentación completa
 
 ---
-
-¿Necesitas agregar más funcionalidades o customizar algo? Todos los endpoints están listos y funcionando! 🎉

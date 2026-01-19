@@ -53,37 +53,65 @@
     </div>
 
     <!-- Modal -->
-    <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
+    <div v-if="showModal" class="modal-overlay" @click.self="cerrarModal">
       <div class="modal">
-        <h3>{{ editando ? 'Editar Usuario' : 'Nuevo Usuario' }}</h3>
+        <h3>{{ editando ? 'Editar Usuario' : 'Crear Usuario' }}</h3>
+
         <form @submit.prevent="guardar" class="form">
           <div class="form-group">
-            <label>Nombre *</label>
-            <input v-model="usuarioActual.nombre" required class="input" />
-          </div>
-          
-          <div class="form-group">
-            <label>Email *</label>
-            <input type="email" v-model="usuarioActual.email" required class="input" />
+            <label>Nombre</label>
+            <input 
+              v-model="usuarioActual.nombre" 
+              type="text" 
+              class="input" 
+              required 
+              autocomplete="off"
+            />
           </div>
 
-          <div class="form-group" v-if="!editando">
-            <label>Contraseña *</label>
-            <input type="password" v-model="usuarioActual.contrasena" required class="input" />
+          <div class="form-group">
+            <label>Email</label>
+            <input 
+              v-model="usuarioActual.email" 
+              type="email" 
+              class="input" 
+              required 
+              autocomplete="off"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>Contraseña</label>
+            <input 
+              v-model="usuarioActual.contrasena_hash" 
+              type="password" 
+              class="input" 
+              :required="!editando"
+              autocomplete="new-password"
+              placeholder=""
+            />
           </div>
 
           <div class="form-group">
             <label>Rol</label>
             <select v-model="usuarioActual.rol" class="input">
               <option value="planificador">Planificador</option>
-              <option value="administrador">Administrador</option>
-              <option value="analista">Analista</option>
+              <option value="admin">Admin</option>
+              <option value="USER">Usuario</option>
             </select>
           </div>
 
+          <!-- ⭐ MENSAJES DE ÉXITO/ERROR ⭐ -->
+          <div v-if="mensaje" class="alert success">{{ mensaje }}</div>
+          <div v-if="error" class="alert error">{{ error }}</div>
+
           <div class="modal-actions">
-            <button type="button" @click="showModal = false" class="btn">Cancelar</button>
-            <button type="submit" class="btn primary">Guardar</button>
+            <button type="button" class="btn secondary" @click="cerrarModal">
+              Cancelar
+            </button>
+            <button type="submit" class="btn primary">
+              {{ editando ? 'Actualizar' : 'Crear' }}
+            </button>
           </div>
         </form>
       </div>
@@ -104,10 +132,15 @@ const totalItems = ref(0)
 
 const showModal = ref(false)
 const editando = ref(false)
+
+// ⭐ AGREGAR ESTAS DOS LÍNEAS ⭐
+const mensaje = ref('')
+const error = ref('')
+
 const usuarioActual = ref({
   nombre: '',
   email: '',
-  contrasena: '',
+  contrasena_hash: '',
   rol: 'planificador'
 })
 
@@ -132,7 +165,7 @@ const abrirModalCrear = () => {
   usuarioActual.value = {
     nombre: '',
     email: '',
-    contrasena: '',
+    contrasena_hash: '',
     rol: 'planificador'
   }
   showModal.value = true
@@ -141,24 +174,42 @@ const abrirModalCrear = () => {
 const abrirModalEditar = (usuario) => {
   editando.value = true
   usuarioActual.value = { ...usuario }
-  delete usuarioActual.value.contrasena
+  delete usuarioActual.value.contrasena_hash
   showModal.value = true
 }
 
 const guardar = async () => {
   try {
+    // Limpiar mensajes previos
+    mensaje.value = ''
+    error.value = ''
+
+    // Validación básica
+    if (!usuarioActual.value.nombre || !usuarioActual.value.email || !usuarioActual.value.contrasena_hash) {
+      error.value = 'Todos los campos son obligatorios'
+      return
+    }
+
     if (editando.value) {
-      const id = usuarioActual.value.id_usuario || usuarioActual.value.id
-      await UsuarioService.actualizar(id, usuarioActual.value)
+      await UsuarioService.actualizar(usuarioActual.value.id_usuario, usuarioActual.value)
+      mensaje.value = 'Usuario actualizado exitosamente'
     } else {
       await UsuarioService.crear(usuarioActual.value)
+      mensaje.value = 'Usuario creado exitosamente'
     }
-    showModal.value = false
+
+    cerrarModal()
     await cargar()
   } catch (e) {
     console.error('Error al guardar:', e)
-    alert('Error al guardar el usuario: ' + (e.response?.data?.message || e.message))
+    error.value = e.response?.data || 'Error al guardar usuario'
   }
+}
+
+const cerrarModal = () => {
+  showModal.value = false
+  mensaje.value = ''
+  error.value = ''
 }
 
 const eliminar = async (usuario) => {
@@ -376,5 +427,23 @@ select.input option {
   gap: 12px;
   justify-content: flex-end;
   margin-top: 8px;
+}
+
+.alert.success {
+  background: rgba(66, 185, 131, 0.15);
+  border: 1px solid rgba(66, 185, 131, 0.35);
+  color: #42b983;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+.alert.error {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #ef4444;
+  padding: 10px 12px;
+  border-radius: 8px;
+  margin: 8px 0;
 }
 </style>
