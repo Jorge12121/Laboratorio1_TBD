@@ -121,7 +121,13 @@ $$ LANGUAGE plpgsql;
 -- ================================================================
 -- 7. TRIGGER: trg_validar_fechas_proyecto
 -- ================================================================
-DROP TRIGGER IF EXISTS trg_validar_fechas_proyecto ON proyectos_urbanos;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trg_validar_fechas_proyecto') THEN
+        DROP TRIGGER trg_validar_fechas_proyecto ON proyectos_urbanos;
+    END IF;
+END $$;
+
 CREATE TRIGGER trg_validar_fechas_proyecto
 BEFORE INSERT OR UPDATE ON proyectos_urbanos
 FOR EACH ROW
@@ -188,7 +194,13 @@ $$;
 -- ================================================================
 -- 10. VISTA MATERIALIZADA: vista_cobertura_infraestructura [OK]
 -- ================================================================
-DROP MATERIALIZED VIEW IF EXISTS vista_cobertura_infraestructura;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_matviews WHERE matviewname = 'vista_cobertura_infraestructura') THEN
+        DROP MATERIALIZED VIEW vista_cobertura_infraestructura;
+    END IF;
+END $$;
+
 CREATE MATERIALIZED VIEW vista_cobertura_infraestructura AS
 SELECT
     z.id     AS id_zona,
@@ -210,7 +222,13 @@ $$ LANGUAGE plpgsql;
 -- ================================================================
 -- 11. VISTA MATERIALIZADA: vista_resumen_proyectos_estado_zona [OK]
 -- ================================================================
-DROP MATERIALIZED VIEW IF EXISTS vista_resumen_proyectos_estado_zona;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_matviews WHERE matviewname = 'vista_resumen_proyectos_estado_zona') THEN
+        DROP MATERIALIZED VIEW vista_resumen_proyectos_estado_zona;
+    END IF;
+END $$;
+
 CREATE MATERIALIZED VIEW vista_resumen_proyectos_estado_zona AS
 SELECT
     COALESCE(z.tipo_zona, 'Sin Zona') AS tipo_zona,
@@ -252,7 +270,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS trg_validar_punto_en_zona ON puntos_interes;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trg_validar_punto_en_zona') THEN
+        DROP TRIGGER trg_validar_punto_en_zona ON puntos_interes;
+    END IF;
+END $$;
+
 CREATE TRIGGER trg_validar_punto_en_zona
 BEFORE INSERT OR UPDATE ON puntos_interes
 FOR EACH ROW
@@ -280,7 +304,13 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS trg_validar_proyecto_en_zona ON proyectos_urbanos;
+DO $$
+BEGIN
+    IF EXISTS (SELECT 1 FROM pg_trigger WHERE tgname = 'trg_validar_proyecto_en_zona') THEN
+        DROP TRIGGER trg_validar_proyecto_en_zona ON proyectos_urbanos;
+    END IF;
+END $$;
+
 CREATE TRIGGER trg_validar_proyecto_en_zona
 BEFORE INSERT OR UPDATE ON proyectos_urbanos
 FOR EACH ROW
